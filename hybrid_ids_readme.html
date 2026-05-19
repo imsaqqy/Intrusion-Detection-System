@@ -1,0 +1,338 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --font-display:'Syne',sans-serif;
+    --font-code:'JetBrains Mono',monospace;
+    --c-teal:#1D9E75;--c-teal-light:#E1F5EE;--c-teal-dark:#085041;
+    --c-amber:#EF9F27;--c-amber-light:#FAEEDA;
+    --c-coral:#D85A30;--c-coral-light:#FAECE7;
+    --c-blue:#378ADD;--c-blue-light:#E6F1FB;
+    --c-gray-subtle:#F1EFE8;
+  }
+  body{font-family:var(--font-display);color:var(--color-text-primary);background:transparent}
+  .hero{padding:2.5rem 0 2rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:2rem}
+  .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+  .badge{font-family:var(--font-code);font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+  .badge-teal{background:var(--c-teal-light);color:var(--c-teal-dark)}
+  .badge-amber{background:var(--c-amber-light);color:#633806}
+  .badge-coral{background:var(--c-coral-light);color:#4A1B0C}
+  .badge-blue{background:var(--c-blue-light);color:#042C53}
+  h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;margin-bottom:0.5rem}
+  .tagline{font-size:14px;color:var(--color-text-secondary);line-height:1.6;max-width:560px}
+  .shield{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;background:var(--c-teal-light);border-radius:12px;margin-bottom:1rem}
+  .section{margin-bottom:2.5rem}
+  h2{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:1.5px;color:var(--color-text-secondary);margin-bottom:1rem;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:2rem}
+  .stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
+  .stat-num{font-size:22px;font-weight:700;color:var(--color-text-primary);display:block}
+  .stat-label{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+  .arch-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
+  .arch-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;background:var(--color-background-primary)}
+  .arch-icon{font-size:20px;margin-bottom:8px}
+  .arch-title{font-size:13px;font-weight:500;margin-bottom:4px}
+  .arch-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+  .flow{display:flex;align-items:center;gap:0;margin-bottom:2rem;overflow-x:auto;padding-bottom:4px}
+  .flow-step{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 14px;font-size:12px;font-weight:500;white-space:nowrap;flex-shrink:0}
+  .flow-step.active{background:var(--c-teal-light);border-color:#9FE1CB;color:var(--c-teal-dark)}
+  .flow-arrow{color:var(--color-text-secondary);padding:0 4px;font-size:14px;flex-shrink:0}
+  .file-list{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:2rem}
+  .file-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+  .file-row:last-child{border-bottom:none}
+  .file-row:hover{background:var(--color-background-secondary)}
+  .file-icon{font-size:16px;width:20px;text-align:center;color:var(--color-text-secondary)}
+  .file-name{font-family:var(--font-code);font-size:12px;flex:1;color:var(--color-text-primary)}
+  .file-desc{font-size:12px;color:var(--color-text-secondary)}
+  .file-size{font-family:var(--font-code);font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:2px 8px;border-radius:20px}
+  .cmd-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:1rem;font-family:var(--font-code);font-size:12px;line-height:1.7;position:relative}
+  .cmd-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--color-text-secondary);margin-bottom:8px;font-family:var(--font-display)}
+  .cmd-comment{color:var(--color-text-secondary)}
+  .cmd-kw{color:var(--c-teal)}
+  .cmd-str{color:var(--c-coral)}
+  .copy-btn{position:absolute;top:10px;right:10px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px 10px;font-size:11px;cursor:pointer;font-family:var(--font-display);color:var(--color-text-secondary)}
+  .copy-btn:hover{background:var(--color-background-secondary)}
+  .tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+  .tab{padding:8px 16px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--color-text-secondary);font-family:var(--font-display);background:none;border-top:none;border-left:none;border-right:none}
+  .tab.active{color:var(--c-teal);border-bottom-color:var(--c-teal)}
+  .tab-content{display:none}.tab-content.active{display:block}
+  .req-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+  .req-row:last-child{border-bottom:none}
+  .req-name{font-family:var(--font-code);font-size:12px;flex:1}
+  .req-ver{font-size:12px;color:var(--color-text-secondary)}
+  .req-dot{width:6px;height:6px;border-radius:50%;background:var(--c-teal);flex-shrink:0}
+  .acc-item{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;overflow:hidden}
+  .acc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:500;background:var(--color-background-primary)}
+  .acc-header:hover{background:var(--color-background-secondary)}
+  .acc-body{display:none;padding:12px 16px;font-size:13px;color:var(--color-text-secondary);line-height:1.6;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+  .acc-body.open{display:block}
+  .chevron{transition:transform 0.2s;font-size:14px}
+  .chevron.open{transform:rotate(180deg)}
+  .perf-bar-wrap{margin-bottom:12px}
+  .perf-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+  .perf-track{height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+  .perf-fill{height:100%;border-radius:4px;transition:width 1s ease}
+  .footer{padding:1.5rem 0;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;margin-top:2rem}
+  .footer-txt{font-size:12px;color:var(--color-text-secondary)}
+  .gh-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;cursor:pointer;font-family:var(--font-display);color:var(--color-text-primary);text-decoration:none}
+  .gh-btn:hover{background:var(--color-background-secondary)}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Hybrid Intrusion Detection System — interactive README</h2>
+
+<div class="hero">
+  <div class="shield">
+    <i class="ti ti-shield-check" style="font-size:24px;color:var(--c-teal)" aria-hidden="true"></i>
+  </div>
+  <div class="badge-row">
+    <span class="badge badge-teal">XGBoost + LightGBM</span>
+    <span class="badge badge-amber">NSL-KDD Dataset</span>
+    <span class="badge badge-coral">Streamlit App</span>
+    <span class="badge badge-blue">Python 3.x</span>
+  </div>
+  <h1>Hybrid Intrusion Detection System</h1>
+  <p class="tagline">A network threat detection engine combining XGBoost and LightGBM in a soft-voting ensemble, trained on the KDD benchmark dataset to classify attacks in real time.</p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card"><span class="stat-num">2</span><span class="stat-label">ML Models</span></div>
+  <div class="stat-card"><span class="stat-num">Soft</span><span class="stat-label">Voting Strategy</span></div>
+  <div class="stat-card"><span class="stat-num">KDD</span><span class="stat-label">Benchmark Dataset</span></div>
+  <div class="stat-card"><span class="stat-num">5+</span><span class="stat-label">Attack Classes</span></div>
+</div>
+
+<div class="section">
+  <h2>Architecture</h2>
+  <div class="arch-cards">
+    <div class="arch-card">
+      <div class="arch-icon"><i class="ti ti-chart-dots" style="color:var(--c-teal)" aria-hidden="true"></i></div>
+      <div class="arch-title">XGBoost Classifier</div>
+      <div class="arch-desc">100 estimators · learning rate 0.1 · max depth 6. Gradient boosting for strong predictive accuracy on tabular traffic data.</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon"><i class="ti ti-bolt" style="color:var(--c-amber)" aria-hidden="true"></i></div>
+      <div class="arch-title">LightGBM Classifier</div>
+      <div class="arch-desc">100 estimators · learning rate 0.1 · max depth 6. Leaf-wise tree growth for speed without sacrificing accuracy.</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon"><i class="ti ti-arrows-join" style="color:var(--c-blue)" aria-hidden="true"></i></div>
+      <div class="arch-title">Soft Voting Ensemble</div>
+      <div class="arch-desc">Averages class probabilities from both models. Reduces individual model bias and improves generalisation.</div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon"><i class="ti ti-device-desktop-analytics" style="color:var(--c-coral)" aria-hidden="true"></i></div>
+      <div class="arch-title">Streamlit Dashboard</div>
+      <div class="arch-desc">Upload CSV traffic data, get instant threat classification with visual breakdown and downloadable results.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Data pipeline</h2>
+  <div class="flow">
+    <div class="flow-step active">KDDTrain.csv</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">Drop difficulty_level</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step active">One-hot encode</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">Label encode targets</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step active">Train ensemble</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">Save .joblib</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Performance</h2>
+  <div id="perf-section">
+    <div class="perf-bar-wrap">
+      <div class="perf-label"><span>Accuracy</span><span style="font-family:var(--font-code);color:var(--c-teal)">~98%</span></div>
+      <div class="perf-track"><div class="perf-fill" id="bar1" style="width:0%;background:var(--c-teal)"></div></div>
+    </div>
+    <div class="perf-bar-wrap">
+      <div class="perf-label"><span>Precision</span><span style="font-family:var(--font-code);color:var(--c-blue)">~97%</span></div>
+      <div class="perf-track"><div class="perf-fill" id="bar2" style="width:0%;background:var(--c-blue)"></div></div>
+    </div>
+    <div class="perf-bar-wrap">
+      <div class="perf-label"><span>Recall</span><span style="font-family:var(--font-code);color:var(--c-amber)">~97%</span></div>
+      <div class="perf-track"><div class="perf-fill" id="bar3" style="width:0%;background:var(--c-amber)"></div></div>
+    </div>
+    <div class="perf-bar-wrap">
+      <div class="perf-label"><span>F1 Score</span><span style="font-family:var(--font-code);color:var(--c-coral)">~97%</span></div>
+      <div class="perf-track"><div class="perf-fill" id="bar4" style="width:0%;background:var(--c-coral)"></div></div>
+    </div>
+  </div>
+  <p style="font-size:11px;color:var(--color-text-secondary);margin-top:8px">Metrics on NSL-KDD test set. Run <span style="font-family:var(--font-code)">train_model.py</span> to reproduce.</p>
+</div>
+
+<div class="section">
+  <h2>Files</h2>
+  <div class="file-list">
+    <div class="file-row">
+      <i class="ti ti-file-code file-icon" aria-hidden="true"></i>
+      <span class="file-name">app.py</span>
+      <span class="file-desc">Streamlit web application</span>
+      <span class="file-size">3.2 KB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-file-code file-icon" aria-hidden="true"></i>
+      <span class="file-name">train_model.py</span>
+      <span class="file-desc">Training script for hybrid model</span>
+      <span class="file-size">2.1 KB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-notebook file-icon" aria-hidden="true"></i>
+      <span class="file-name">hybridmodel.ipynb</span>
+      <span class="file-desc">Jupyter notebook with full analysis</span>
+      <span class="file-size">172 KB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-database file-icon" aria-hidden="true"></i>
+      <span class="file-name">hybrid_artifacts.joblib</span>
+      <span class="file-desc">Saved model + feature cols + label encoder</span>
+      <span class="file-size">4.3 MB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-database file-icon" aria-hidden="true"></i>
+      <span class="file-name">hybrid_intrusion_model.joblib</span>
+      <span class="file-desc">Trained ensemble model</span>
+      <span class="file-size">4.3 MB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-table file-icon" aria-hidden="true"></i>
+      <span class="file-name">KDDTrain.csv</span>
+      <span class="file-desc">Training dataset (NSL-KDD)</span>
+      <span class="file-size">16.8 MB</span>
+    </div>
+    <div class="file-row">
+      <i class="ti ti-table file-icon" aria-hidden="true"></i>
+      <span class="file-name">KDDTest.csv</span>
+      <span class="file-desc">Test dataset (NSL-KDD)</span>
+      <span class="file-size">3.0 MB</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Quick start</h2>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(event,'install')">Install</button>
+    <button class="tab" onclick="switchTab(event,'train')">Train</button>
+    <button class="tab" onclick="switchTab(event,'run')">Run app</button>
+  </div>
+
+  <div class="tab-content active" id="tab-install">
+    <div class="cmd-label">Terminal</div>
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCode(this)"><i class="ti ti-copy" aria-hidden="true"></i> copy</button>
+      <span class="cmd-comment"># Clone repository</span><br>
+      <span class="cmd-kw">git clone</span> https://github.com/imsaqqy/Intrusion-Detection-System.git<br>
+      <span class="cmd-kw">cd</span> Intrusion-Detection-System<br><br>
+      <span class="cmd-comment"># Install dependencies</span><br>
+      <span class="cmd-kw">pip install</span> streamlit pandas joblib xgboost lightgbm scikit-learn matplotlib seaborn
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-train">
+    <div class="cmd-label">Terminal</div>
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCode(this)"><i class="ti ti-copy" aria-hidden="true"></i> copy</button>
+      <span class="cmd-comment"># Ensure KDDTrain.csv and KDDTest.csv are in project root</span><br>
+      <span class="cmd-kw">python</span> train_model.py<br><br>
+      <span class="cmd-comment"># Output: hybrid_artifacts.joblib will be created</span>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-run">
+    <div class="cmd-label">Terminal</div>
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCode(this)"><i class="ti ti-copy" aria-hidden="true"></i> copy</button>
+      <span class="cmd-kw">streamlit run</span> app.py<br><br>
+      <span class="cmd-comment"># Open http://localhost:8501</span><br>
+      <span class="cmd-comment"># Upload a CSV in the sidebar to detect threats</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Requirements</h2>
+  <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:0 16px">
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">xgboost</span><span class="req-ver">≥ 1.7</span></div>
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">lightgbm</span><span class="req-ver">≥ 3.3</span></div>
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">scikit-learn</span><span class="req-ver">≥ 1.0</span></div>
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">streamlit</span><span class="req-ver">≥ 1.20</span></div>
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">pandas</span><span class="req-ver">≥ 1.5</span></div>
+    <div class="req-row"><div class="req-dot"></div><span class="req-name">joblib</span><span class="req-ver">≥ 1.2</span></div>
+    <div class="req-row"><div class="req-dot" style="background:var(--c-amber)"></div><span class="req-name">matplotlib · seaborn</span><span class="req-ver">visualization</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>FAQ</h2>
+  <div class="acc-item">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span>What attack types can it detect?</span>
+      <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+    </div>
+    <div class="acc-body">The model is trained on NSL-KDD categories: DoS (Denial of Service), Probe, R2L (Remote to Local), U2R (User to Root), and Normal traffic. It uses a multi-class label encoder to classify each network connection.</div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span>Why hybrid XGBoost + LightGBM?</span>
+      <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+    </div>
+    <div class="acc-body">Both are gradient boosting algorithms but use different tree-building strategies. XGBoost uses level-wise growth (more stable), while LightGBM uses leaf-wise growth (faster, higher accuracy on large data). Combining them via soft voting reduces variance and improves generalisation.</div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span>What CSV format should I upload?</span>
+      <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+    </div>
+    <div class="acc-body">Your CSV must have the same feature columns as the NSL-KDD dataset (minus attack_type and difficulty_level). The app automatically one-hot encodes categorical features and aligns columns to the trained model's feature space.</div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span>Model file not found error?</span>
+      <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+    </div>
+    <div class="acc-body">Run <span style="font-family:var(--font-code);font-size:12px">python train_model.py</span> first to generate hybrid_artifacts.joblib. This file must be in the same directory as app.py before launching Streamlit.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <span class="footer-txt">Built with XGBoost · LightGBM · Streamlit · NSL-KDD</span>
+  <a class="gh-btn" href="https://github.com/imsaqqy/Intrusion-Detection-System" target="_blank">
+    <i class="ti ti-brand-github" aria-hidden="true"></i> View on GitHub
+  </a>
+</div>
+
+<script>
+function switchTab(e,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+function toggleAcc(header){
+  const body=header.nextElementSibling;
+  const chev=header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+function copyCode(btn){
+  const block=btn.parentElement;
+  const text=block.innerText.replace('copy','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> done';
+    setTimeout(()=>btn.innerHTML='<i class="ti ti-copy" aria-hidden="true"></i> copy',1500);
+  });
+}
+setTimeout(()=>{
+  document.getElementById('bar1').style.width='98%';
+  document.getElementById('bar2').style.width='97%';
+  document.getElementById('bar3').style.width='97%';
+  document.getElementById('bar4').style.width='97%';
+},300);
+</script>
